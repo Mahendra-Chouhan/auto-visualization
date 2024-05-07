@@ -62,7 +62,8 @@ def _removed_without_path_records(visualizations):
      record = visualizations[index]
      if "visualizations_path" not in record:
           blank_vis.append(index)
-          
+    print(len(visualizations))
+    print(blank_vis)      
     for blank_index in blank_vis:
         del visualizations[blank_index]
     return visualizations

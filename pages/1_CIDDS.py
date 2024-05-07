@@ -39,7 +39,7 @@ datasets = [
 ]
 
 # Initialize visualizations in session state
-if "cidds_df" not in st.session_state:
+if f"{application}_df" not in st.session_state:
     st_utils.init_session()
 else:
     st_utils.Preload(lida, textgen_config, application)
@@ -59,7 +59,7 @@ if submit_button:
         preprocess_cidds.main(input_file, output_file)
     
         cidds_df = pd.read_csv(output_file)
-        st.session_state["cidds_df"] = cidds_df
+        st.session_state[f"{application}_df"] = cidds_df
         with st.container(border=True):
             st.dataframe(cidds_df.head(7), hide_index=True)  # Display the dataframe
         # st.write("## Summary")
@@ -74,10 +74,11 @@ if submit_button:
         
         # # Process KPI queries
         for index, row in custom_kpis.iterrows():
-            st_utils.visuals(lida, textgen_config, row['KPI_text'], row['graph_title'], st.session_state["cidds_summary"], application)
+            st_utils.visuals(lida, textgen_config, row['KPI_text'], row['graph_title'], 
+                             textual_summary, application)
 
-if "cidds_df" in st.session_state:
-    worksoft_df = st.session_state["cidds_df"] 
+if f"{application}_df" in st.session_state:
+    worksoft_df = st.session_state[f"{application}_df"] 
     textual_summary = visualization.generate_textual_summary(lida, textgen_config, worksoft_df) 
     with st.container(border=True):
         st.write("##### Additional Visualizations")

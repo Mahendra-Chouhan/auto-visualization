@@ -142,7 +142,7 @@ def Preload(lida, textgen_config, application, except_ids=[]):
 
     if application == "CIDDS" and f"{application}_df" in st.session_state:
         with st.container(border=True):
-            st.dataframe(st.session_state["cidds_df"].head(7), hide_index=True)
+            st.dataframe(st.session_state[f"{application}_df"].head(7), hide_index=True)
         st.header("Visualizations")
         if f"{application}_visualizations" in st.session_state:
             my_complex_dict = pprint.pformat(st.session_state[f"{application}_visualizations"])
@@ -167,7 +167,7 @@ def Preload(lida, textgen_config, application, except_ids=[]):
     if application == "Stock" and f"{application}_df" in st.session_state:
         # st.write(st.session_state[f"{application}_stock_info"].info["longBusinessSummary"])
         with st.container(border=True):
-            st.dataframe(st.session_state[f"{application}_df"].head(7), hide_index=True)
+            st.dataframe(st.session_state[f"{application}_df"].head(7))
         st.header("Visualizations")
         if f"{application}_visualizations" in st.session_state:
             my_complex_dict = pprint.pformat(st.session_state[f"{application}_visualizations"])

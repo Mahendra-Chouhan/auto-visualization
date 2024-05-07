@@ -56,6 +56,7 @@ if submit_button:
     st.subheader(f"About Stock : {stock_name_selection}")
     # st.write(stock_info.info["longBusinessSummary"])
     stock_df = yf.download(stock_name_selection, start=start_date, end=end_date)
+    stock_df = stock_df.reset_index()
     with st.container(border=True):
             st.dataframe(stock_df.head(7))  # Display the dataframe
     st.session_state[f"{application}_df"] = stock_df

@@ -30,8 +30,5 @@ pillow==10.2.0
 seaborn==0.13.2
 statsmodels==0.14.1
 #python-dotenv
-
-
-# The following can be used for Okta authentication
-# git+https://github.com/sfc-gh-bhess/st_oauth.git
-# PyJWT
+yfinance 
+lida

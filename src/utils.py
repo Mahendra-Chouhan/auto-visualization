@@ -48,6 +48,32 @@ def get_kpis(application):
         kpi_dict["KPI"] = "Create an interactive stacked bar chart to visualize the distribution of network traffic across different classes (e.g., normal, suspicious, unknown)" 
         kpi_dict["disabled"] = False
         kpi_list.append(kpi_dict)
+    
+    if application == "Stock":
+        
+        kpi_dict = dict()
+        kpi_dict["text"] = "Distribution of Opening prices"
+        kpi_dict["KPI"] = "Histogram of Open prices" 
+        kpi_dict["disabled"] = False
+        kpi_list.append(kpi_dict)
+
+        kpi_dict = dict()
+        kpi_dict["text"] = "Relationship between Volume and Closing prices"
+        kpi_dict["KPI"] = "Scatter plot of Volume against Closing prices" 
+        kpi_dict["disabled"] = False
+        kpi_list.append(kpi_dict)
+
+        kpi_dict = dict()
+        kpi_dict["text"] = "Prices compare between High and Low"
+        kpi_dict["KPI"] = "Line chart of High and Low prices over time" 
+        kpi_dict["disabled"] = False
+        kpi_list.append(kpi_dict)
+
+        kpi_dict = dict()
+        kpi_dict["text"] = "Dividends and Stock Splits compare"
+        kpi_dict["KPI"] = "Bar chart of Dividends and Stock Splits" 
+        kpi_dict["disabled"] = False
+        kpi_list.append(kpi_dict)
 
 
     return kpi_list

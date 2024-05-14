@@ -61,7 +61,7 @@ if submit_button:
         cidds_df = pd.read_csv(output_file)
         st.session_state[f"{application}_df"] = cidds_df
         with st.container(border=True):
-            st.dataframe(cidds_df.head(7), hide_index=True)  # Display the dataframe
+            st.dataframe(cidds_df.head(7), hide_index=True, use_container_width=True)  # Display the dataframe
         # st.write("## Summary")
 
         textual_summary = visualization.generate_textual_summary(lida, textgen_config, cidds_df)

@@ -88,6 +88,12 @@ def init_session():
         del st.session_state["Stock_df"]
     st.session_state["Stock_visualizations"] = []
     st.session_state["Stock_KPIs"] = utils.get_kpis("Stock")
+
+    
+    if "Plaid_df" in st.session_state:
+        del st.session_state["Plaid_df"]
+    st.session_state["Plaid_visualizations"] = []
+    st.session_state["Plaid_KPIs"] = utils.get_kpis("Plaid")
     
 
 def visuals(lida, textgen_config, kpi_query, graph_title, textual_summary, application):
@@ -131,6 +137,31 @@ def visuals(lida, textgen_config, kpi_query, graph_title, textual_summary, appli
             utils.get_status_message(exc.response.status_code, "deereai")
             st.warning(f"I am unable to process the request due to: {exc.response.status_code} error", icon="😔")
 
+def preload_visualization(application, lida, textgen_config, except_ids=[]):
+    st.header("Visualizations")
+    if f"{application}_visualizations" in st.session_state:
+        my_complex_dict = pprint.pformat(st.session_state[f"{application}_visualizations"])
+        # logger.debug(f"preloaded dictionary: \n{my_complex_dict}")
+        
+        for visuals in st.session_state[f"{application}_visualizations"]:
+            if visuals['id'] not in except_ids:
+                with st.container(border=True):
+                    kpi_query = visuals["kpi_query"]
+                    st.text_input("Prompt:", value=visuals["kpi_query"], key=visuals["id"], on_change=visual_edit,
+                                  args=(lida, textgen_config, visuals["id"], st.session_state[f"{application}_summary"], application))
+                    if "visualizations_path" in visuals:
+                        st.image(visuals["visualizations_path"], use_column_width="auto")
+                        if is_diaplay_explability:
+                            with st.expander("See explanation"):
+                                for description in visuals["visualizations_description"]:
+                                    st.markdown(f"""**{description['section']}**""")
+                                    st.write(description["explanation"])
+                                    st.divider()
+                    else:
+                        st.warning(f"I am unable to generate visualtization for:{kpi_query}.")
+
+
+
 def load_template(path):
     # load json
     with open(path, 'r') as myfile:
@@ -142,53 +173,20 @@ def Preload(lida, textgen_config, application, except_ids=[]):
 
     if application == "CIDDS" and f"{application}_df" in st.session_state:
         with st.container(border=True):
-            st.dataframe(st.session_state[f"{application}_df"].head(7), hide_index=True)
-        st.header("Visualizations")
-        if f"{application}_visualizations" in st.session_state:
-            my_complex_dict = pprint.pformat(st.session_state[f"{application}_visualizations"])
-            # logger.debug(f"preloaded dictionary: \n{my_complex_dict}")
-            
-            for visuals in st.session_state[f"{application}_visualizations"]:
-                if visuals['id'] not in except_ids:
-                    with st.container(border=True):
-                        kpi_query = visuals["kpi_query"]
-                        st.text_input("Prompt:", value=visuals["kpi_query"], key=visuals["id"], on_change=visual_edit, args=(lida, textgen_config, visuals["id"], st.session_state["cidds_summary"], application))
-                        if "visualizations_path" in visuals:
-                            st.image(visuals["visualizations_path"], use_column_width="auto")
-                            if is_diaplay_explability:
-                                with st.expander("See explanation"):
-                                    for description in visuals["visualizations_description"]:
-                                        st.markdown(f"""**{description['section']}**""")
-                                        st.write(description["explanation"])
-                                        st.divider()
-                        else:
-                            st.warning(f"I am unable to generate visualtization for:{kpi_query}.")
-
+            st.dataframe(st.session_state[f"{application}_df"].head(7), hide_index=True, use_container_width=True)
+        preload_visualization(application, lida, textgen_config, except_ids)
+        
+    if application == "Plaid" and f"{application}_df" in st.session_state:
+        # st.write(st.session_state[f"{application}_stock_info"].info["longBusinessSummary"])
+        with st.container(border=True):
+            st.dataframe(st.session_state[f"{application}_df"].head(7), hide_index=True, use_container_width=True)
+        preload_visualization(application, lida, textgen_config, except_ids)    
+        
     if application == "Stock" and f"{application}_df" in st.session_state:
         # st.write(st.session_state[f"{application}_stock_info"].info["longBusinessSummary"])
         with st.container(border=True):
-            st.dataframe(st.session_state[f"{application}_df"].head(7))
-        st.header("Visualizations")
-        if f"{application}_visualizations" in st.session_state:
-            my_complex_dict = pprint.pformat(st.session_state[f"{application}_visualizations"])
-            # logger.debug(f"preloaded dictionary: \n{my_complex_dict}")
-            
-            for visuals in st.session_state[f"{application}_visualizations"]:
-                if visuals['id'] not in except_ids:
-                    with st.container(border=True):
-                        kpi_query = visuals["kpi_query"]
-                        st.text_input("Prompt:", value=visuals["kpi_query"], key=visuals["id"], on_change=visual_edit, args=(lida, textgen_config, visuals["id"], 
-                                                                                                                             st.session_state["Stock_summary"], application))
-                        if "visualizations_path" in visuals:
-                            st.image(visuals["visualizations_path"], use_column_width="auto")
-                            if is_diaplay_explability:
-                                with st.expander("See explanation"):
-                                    for description in visuals["visualizations_description"]:
-                                        st.markdown(f"""**{description['section']}**""")
-                                        st.write(description["explanation"])
-                                        st.divider()
-                        else:
-                            st.warning(f"I am unable to generate visualtization for:{kpi_query}.")
+            st.dataframe(st.session_state[f"{application}_df"].head(7), hide_index=True, use_container_width=True)
+        preload_visualization(application, lida, textgen_config, except_ids)
 
 def save_template(user_id, application, template_name):
     user_dict = dict()

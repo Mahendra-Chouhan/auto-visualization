@@ -32,3 +32,4 @@ statsmodels==0.14.1
 #python-dotenv
 yfinance 
 lida
+plaid-python

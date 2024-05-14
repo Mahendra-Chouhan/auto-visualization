@@ -3,3 +3,5 @@ create a horizontal bar chart to analyze the top network traffic patterns based 
 Generate a pie chart to visualize the distribution of network traffic across Suspicious Normal and Unknown classes display the legend below the chart Ensure that the height and width of the graph are equal,Distribution of network traffic,CIDDS
 create line chart for open and high,High and Open Analysis,Stock
 line chart for volume,Volume Analysis,Stock
+bar chart of category vs. amount,Highest transaction amounts,Plaid
+line chart of date vs. amount,Transaction amounts vary over time,Plaid
